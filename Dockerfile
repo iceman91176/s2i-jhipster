@@ -1,36 +1,52 @@
-
-# s2i-jhipster
+# springboot-sti
 FROM openshift/base-centos7
+MAINTAINER Carsten Bucchberger <c.buchberger@witcom.de>
 
-# TODO: Put the maintainer name in the image metadata
-# MAINTAINER Your Name <your@email.com>
+# Install build tools on top of base image
+# Java jdk 8, Maven 3.3, Gradle 2.6
+ENV MAVEN_VERSION 3.3.9
 
-# TODO: Rename the builder environment variable to inform users about application you provide them
-# ENV BUILDER_VERSION 1.0
+ENV MVN_MIRROR http://mirror.netcologne.de/apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
 
-# TODO: Set labels used in OpenShift to describe the builder image
-#LABEL io.k8s.description="Platform for building xyz" \
-#      io.k8s.display-name="builder x.y.z" \
-#      io.openshift.expose-services="8080:http" \
-#      io.openshift.tags="builder,x.y.z,etc."
+RUN yum install -y --enablerepo=centosplus \
+    tar unzip bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
+    curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
+    yum -y install nodejs && \
+    yum clean all -y && \
+    (curl -0 $MVN_MIRROR | \
+    tar -zx -C /usr/local) && \
+    mv /usr/local/apache-maven-$MAVEN_VERSION /usr/local/maven && \
+    ln -sf /usr/local/maven/bin/mvn /usr/local/bin/mvn && \
+    mkdir -p /opt/openshift && \
+    mkdir -p /opt/app-root/source && chmod -R a+rwX /opt/app-root/source && \
+    mkdir -p /opt/s2i/destination && chmod -R a+rwX /opt/s2i/destination && \
+    mkdir -p /opt/app-root/src && chmod -R a+rwX /opt/app-root/src
 
-# TODO: Install required packages here:
-# RUN yum install -y ... && yum clean all -y
+ENV PATH=/opt/maven/bin/:$PATH
 
-# TODO (optional): Copy the builder files into /opt/app-root
-# COPY ./<builder_folder>/ /opt/app-root/
 
-# TODO: Copy the S2I scripts to /usr/libexec/s2i, since openshift/base-centos7 image sets io.openshift.s2i.scripts-url label that way, or update that label
-# COPY ./.s2i/bin/ /usr/libexec/s2i
+ENV BUILDER_VERSION 1.1
 
-# TODO: Drop the root user and make the content of /opt/app-root owned by user 1001
-# RUN chown -R 1001:1001 /opt/app-root
+LABEL io.k8s.description="Platform for building jHipster Applications with maven" \
+      io.k8s.display-name="jHipster builder 1.0" \
+      io.openshift.expose-services="8080:http" \
+      io.openshift.tags="jhipster,builder,maven-3"
+
+# TODO (optional): Copy the builder files into /opt/openshift
+# COPY ./<builder_folder>/ /opt/openshift/
+# COPY Additional files,configurations that we want to ship by default, like a default setting.xml
+
+LABEL io.openshift.s2i.scripts-url=image:///usr/local/s2i
+COPY ./.s2i/bin/ /usr/local/s2i
+
+RUN chown -R 1001:1001 /opt/openshift
 
 # This default user is created in the openshift/base-centos7 image
 USER 1001
 
-# TODO: Set the default port for applications built using this image
-# EXPOSE 8080
+# Set the default port for applications built using this image
+EXPOSE 8080
 
-# TODO: Set the default CMD for the image
-# CMD ["usage"]
+# Set the default CMD for the image
+# CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/opt/openshift/app.jar"]
+CMD ["usage"]
