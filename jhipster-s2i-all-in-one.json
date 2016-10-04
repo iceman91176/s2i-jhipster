@@ -41,8 +41,8 @@
                "type": "Docker",
                "dockerStrategy": {
                   "from": {
-                     "kind": "ImageStreamTag",
-                     "name": "centos:7"
+                     "kind": "DockerImage",
+                     "name": "docker.io/centos:centos7"
                   }
                }
             },
@@ -53,16 +53,6 @@
                }
             },
             "resources": {}
-         }
-      },
-      {
-         "kind": "ImageStream",
-         "apiVersion": "v1",
-         "metadata": {
-            "name": "centos"
-         },
-         "spec": {
-            "dockerImageRepository": "library/centos:centos7"
          }
       },
       {
