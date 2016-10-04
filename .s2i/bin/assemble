@@ -64,8 +64,9 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   mvn --version
 
   # Execute Build
-  ./mvnw $BUILDER_ARGS
-
+  #./mvnw $BUILDER_ARGS
+  mvn -e $BUILDER_ARGS
+ 
   ERR=$?
   if [ $ERR -ne 0 ]; then
     echo "Aborting due to error code $ERR from Maven build"

@@ -5,8 +5,8 @@ MAINTAINER Carsten Bucchberger <c.buchberger@witcom.de>
 # Install build tools on top of base image
 # Java jdk 8, Maven 3.3, Gradle 2.6
 ENV MAVEN_VERSION 3.3.9
-
-ENV MVN_MIRROR http://mirror.netcologne.de/apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
+#http://mirror.23media.de/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+ENV MVN_MIRROR http://mirror.23media.de/apache/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
 
 RUN yum install -y --enablerepo=centosplus \
     tar unzip bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
