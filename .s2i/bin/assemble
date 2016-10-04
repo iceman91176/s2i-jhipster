@@ -85,7 +85,9 @@ if [ -f "$LOCAL_SOURCE_DIR/pom.xml" ]; then
   if [ -d "$HOME/.npm" ]; then
     rm -rf "$HOME/.npm"
   fi
-
+  if [ -f "/tmp/spring.log" ]; then
+    rm -rf /tmp/spring.log
+  fi
 
   popd &> /dev/null
 fi
