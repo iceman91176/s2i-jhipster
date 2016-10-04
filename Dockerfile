@@ -17,7 +17,7 @@ RUN yum install -y --enablerepo=centosplus \
     tar -zx -C /usr/local) && \
     mv /usr/local/apache-maven-$MAVEN_VERSION /usr/local/maven && \
     ln -sf /usr/local/maven/bin/mvn /usr/local/bin/mvn && \
-    mkdir -p /opt/openshift && \
+    mkdir -p /opt/openshift && chmod -R a+rwX /opt/openshift && \
     mkdir -p /opt/app-root/source && chmod -R a+rwX /opt/app-root/source && \
     mkdir -p /opt/s2i/destination && chmod -R a+rwX /opt/s2i/destination && \
     mkdir -p /opt/app-root/src && chmod -R a+rwX /opt/app-root/src
