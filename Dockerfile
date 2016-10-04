@@ -9,7 +9,7 @@ ENV MAVEN_VERSION 3.3.9
 ENV MVN_MIRROR http://mirror.23media.de/apache/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz
 
 RUN yum install -y --enablerepo=centosplus \
-    tar unzip bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
+    tar unzip bc bzip2 which lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
     curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
     yum -y install nodejs && \
     yum clean all -y && \
