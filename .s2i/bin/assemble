@@ -46,7 +46,9 @@ function copy_artifacts() {
 }
 
 # Copy the source for compilation
+shopt -s dotglob
 cp -ad /tmp/src/* $LOCAL_SOURCE_DIR
+shopt -u dotglob
 
 # If a pom.xml is present, this is a normal build scenario
 # so run maven.
